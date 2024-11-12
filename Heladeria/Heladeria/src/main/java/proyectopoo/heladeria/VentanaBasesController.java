@@ -5,7 +5,8 @@
 package proyectopoo.heladeria;
 
 import Modelo.Base;
-import static Modelo.Base.bases;
+import static Modelo.GestorDeBases.bases;
+
 import Modelo.IncompleteStageException;
 import Modelo.ManejoArchivos;
 import Modelo.Pedido;

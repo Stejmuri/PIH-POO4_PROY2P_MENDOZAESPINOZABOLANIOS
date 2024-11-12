@@ -25,35 +25,41 @@ import proyectopoo.heladeria.VentanaToppingsController;
  * @author tomas
  */
 public class Pedido implements Serializable, Pagable {
-    /**
-     * Base del helado
-     */
     private Base base1;
-    /**
-     * ArrayList de sabores del helado
-     */
     private ArrayList<Sabor> listasabores;
-    /**
-     * ArrayList de topping del helado
-     */
     private ArrayList<Topping> listatopping;
-    /**
-     * ID de pago usado en el método generar transaccion
-     */
     private int numPago = 9999;
+    // Dependencias inyectadas a través de interfaces
+    private ClienteInfo clienteInfo;
+    private ControladorDePago controladorDePago;
+    private NumeroDePedido numeroDePedido;
     
-    /**
-     * 
-     * @param base1 Base de helado escogida por el cliente
-     * @param listasabores Lista de sabores que el cliente escogió para su helado
-     * @param listatopping Lista de toppings que el cliente eligió para su helado
-     */
-    public Pedido(Base base1, ArrayList<Sabor> listasabores, ArrayList<Topping> listatopping) {
+    public Pedido(Base base1, ArrayList<Sabor> listasabores, ArrayList<Topping> listatopping,
+                  ClienteInfo clienteInfo, ControladorDePago controladorDePago, NumeroDePedido numeroDePedido) {
         this.base1 = base1;
         this.listasabores = listasabores;
         this.listatopping = listatopping;
+        this.clienteInfo = clienteInfo;
+        this.controladorDePago = controladorDePago;
+        this.numeroDePedido = numeroDePedido;
     }
 
+    @Override
+        public void generarTransaccion() {
+        Date fecha = new Date();
+        SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
+        double totalPago = controladorDePago.obtenerTotalPago();
+
+        try (BufferedWriter bf = new BufferedWriter(new FileWriter(ManejoArchivos.rutaArchivos + "pagos.txt", true))) {
+            String line = numPago + "," + numeroDePedido.obtenerNumeroPedido() + "," +
+                          clienteInfo.getUsuario() + "," + totalPago + "," +
+                          sd.format(fecha) + "," + String.valueOf(controladorDePago.obtenerTipoPago());
+            bf.write(line + "\n");
+            numPago--;
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+    }
     /**
      * 
      * @return Base del helado escogida por el cliente
@@ -102,34 +108,6 @@ public class Pedido implements Serializable, Pagable {
      */
     public int getNumPago() {
         return numPago;
-    }
-
-
-
-    /**
-     * Genera la transaccion que se ha generado al pagar el pedido, y escribe la 
-     * informacion del pago en un archivo pago.txt
-     */
-    @Override
-    public void generarTransaccion() {
-        Date fecha=new Date();
-        SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
-        double totalPago=0;
-        if (PagoController.clasep.equals(TipoPago.C)){
-            totalPago=PagoController.totalTarjeta;
-        }
-        else{
-            totalPago=PagoController.totalIVA;
-        }
-        try(BufferedWriter bf= new BufferedWriter(new FileWriter(ManejoArchivos.rutaArchivos+"pagos.txt",true))){
-            String line=numPago+","+VentanaToppingsController.numPedido+","+VentanaInicioController.clienteActual.getUsuario()+
-                    ","+totalPago+","+sd.format(fecha)+","+String.valueOf(PagoController.clasep);
-            bf.write(line+"\n");
-            numPago--;
-        }catch(IOException ioe){
-            System.out.println(ioe.getMessage());
-        }
-        
     }
     /**
      * 

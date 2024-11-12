@@ -4,6 +4,8 @@
  */
 package proyectopoo.heladeria;
 
+import Modelo.EscritorDeArchivos;
+import Modelo.LectorDeTexto;
 import Modelo.ManejoArchivos;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,13 +40,15 @@ public class VentanaPedidosActualizadosController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        LectorDeTexto lectorDeTexto = new LectorDeTexto();
+        EscritorDeArchivos escritorDeTexto = null; // No se necesita para esta clase
+        ManejoArchivos manejoArchivos = new ManejoArchivos(lectorDeTexto, escritorDeTexto);
         
         Task<Void> actualizarTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 while (running) {
-                    ArrayList<String> pedidos = ManejoArchivos.leerArchivoTexto("pedido.txt");
+                    ArrayList<String> pedidos = manejoArchivos.leerArchivo("pedido.txt");
                     Collections.reverse( pedidos );
                     ObservableList<String> items = FXCollections.observableArrayList(pedidos);
                     

@@ -1,5 +1,9 @@
 package proyectopoo.heladeria;
 
+import Modelo.EscritorDeArchivos;
+import Modelo.EscritorDeTexto;
+import Modelo.LectorDeArchivos;
+import Modelo.LectorDeTexto;
 import javafx.scene.input.MouseEvent;
 
 import Modelo.Local;
@@ -93,9 +97,12 @@ public class VentanaUbicacionController implements Initializable {
      */
     @FXML
     public void CargarImagenes() {
+        LectorDeArchivos lectorDeTexto = new LectorDeTexto();
+        EscritorDeArchivos escritorDeTexto = new EscritorDeTexto();
+        ManejoArchivos manejoArchivos = new ManejoArchivos(lectorDeTexto, escritorDeTexto);
         Thread t = new Thread(new Runnable() {
             public void run() {
-                ArrayList<String> lineas = ManejoArchivos.leerArchivoTexto("locales.txt");
+                ArrayList<String> lineas = manejoArchivos.leerArchivo("locales.txt");
 
                 for (String linea : lineas) {
                     String[] datos = linea.split(",");

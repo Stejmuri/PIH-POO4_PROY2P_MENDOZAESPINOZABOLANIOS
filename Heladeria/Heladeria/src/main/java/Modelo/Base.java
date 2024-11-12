@@ -15,8 +15,6 @@ public class Base implements Comparable<Base>,Serializable {
     /**
     * Una lista estática de objetos `Base`.
     */
-    public static ArrayList<Base> bases;
-    
     private String nombreBase;
     private double precioBase; 
     /**

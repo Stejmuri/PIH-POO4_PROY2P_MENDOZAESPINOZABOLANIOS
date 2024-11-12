@@ -8,6 +8,7 @@ import Modelo.Base;
 import Modelo.Cliente;
 import Modelo.IncompleteStageException;
 import Modelo.ManejoArchivos;
+import Modelo.ProcesadorDeDatos;
 import Modelo.Sabor;
 import Modelo.Topping;
 import java.io.FileInputStream;
@@ -104,13 +105,13 @@ public class VentanaInicioController implements Initializable {
             
             Thread cargaArchivoThread = new Thread(() -> {
         try {
-            clientesV1 = ManejoArchivos.listaClientes();
+            clientesV1 = ProcesadorDeDatos.listaClientes();
             System.out.println("clientes cargados");
-            bases = ManejoArchivos.listaBases();
+            bases = ProcesadorDeDatos.listaBases();
             System.out.println("bases cargadas");
-            sabores = ManejoArchivos.listaSabores();
+            sabores = ProcesadorDeDatos.listaSabores();
             System.out.println("sabores cargados");
-            toppings = ManejoArchivos.listaToppings();
+            toppings = ProcesadorDeDatos.listaToppings();
             System.out.println("toppings cargados");
         } catch (Exception e) {
             System.out.println("Proceso fallido");

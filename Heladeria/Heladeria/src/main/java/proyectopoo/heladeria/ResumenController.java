@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -158,24 +159,20 @@ public class ResumenController implements Initializable {
         String datos[]=s.trim().split(":");
         String componente = datos[0];
         String nombreSabor= datos[1].substring(1);
+        boolean encontrado = false;
+
         if(componente.equals("Sabor")){
-            if (App.pedidoactual.getListasabores().size()>1){
-                listview.getItems().remove(s); 
-                for(Sabor sa : App.pedidoactual.getListasabores()){
-                    if (sa.getNombreSabor().equals(nombreSabor)){
-                        App.pedidoactual.getListasabores().remove(sa);
-                        totalResumen-=sa.getPrecioSabor();
+            Iterator <Sabor> iterator = App.pedidoactual.getListasabores().iterator();
+            while (iterator.hasNext()) {
+                Sabor sa = iterator.next();
+                if (sa.getNombreSabor().equals(nombreSabor)){
+                    iterator.remove();
+                    totalResumen-=sa.getPrecioSabor();
+                    encontrado = true;
+                    break;
+                        }
                     }
-                }
             }
-            else{
-                msj.setText("Solo puedes eliminar 1 sabor");
-            }
-        }
-        else{
-            msj.setText("Solo puedes eliminar sabores de tu pedido");
-        }
-        total.setText("$ "+String.valueOf(totalResumen));
     }
       /**
      * Metodo llamado por botonContinuar() para guardar el pedido en el archivo

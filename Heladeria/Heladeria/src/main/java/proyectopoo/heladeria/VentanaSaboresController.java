@@ -8,6 +8,7 @@ import Modelo.IncompleteStageException;
 import Modelo.Local;
 import Modelo.ManejoArchivos;
 import Modelo.Pedido;
+import Modelo.ProcesadorDeDatos;
 import Modelo.Sabor;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -107,7 +108,7 @@ public class VentanaSaboresController implements Initializable {
      * sabores
      */
     public void cargarsabores() {
-        ArrayList<Sabor> listalineas = ManejoArchivos.listaSabores();
+        ArrayList<Sabor> listalineas = ProcesadorDeDatos.listaSabores();
                 for (Sabor sabores:listalineas){
                 Sabor sabor = new Sabor(sabores.getNombreSabor(), sabores.getPrecioSabor());
                 listasabores.add(sabor);

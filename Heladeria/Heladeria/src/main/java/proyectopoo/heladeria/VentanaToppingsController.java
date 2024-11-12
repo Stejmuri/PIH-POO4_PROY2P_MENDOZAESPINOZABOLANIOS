@@ -6,6 +6,7 @@ package proyectopoo.heladeria;
 
 import Modelo.ManejoArchivos;
 import Modelo.Pedido;
+import Modelo.ProcesadorDeDatos;
 import Modelo.Sabor;
 import Modelo.Topping;
 import java.io.BufferedReader;
@@ -108,7 +109,7 @@ public class VentanaToppingsController implements Initializable {
      * Carga los toppings del archivo de toppings.
      */
     public void cargartoppings() {
-         ArrayList<Topping> listalineas = ManejoArchivos.listaToppings();
+         ArrayList<Topping> listalineas = ProcesadorDeDatos.listaToppings();
                 for (Topping toppings:listalineas){
                 Topping topping = new Topping(toppings.getNombreTopping(), toppings.getPrecioTopping());
                 listatoppings.add(topping);
